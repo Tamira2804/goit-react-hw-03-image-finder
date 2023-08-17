@@ -1,0 +1,41 @@
+@import 'styles/shared.scss';
+
+.ContactList {
+  @extend %list;
+
+  width: 400px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.ContactList__item {
+  display: flex;
+  align-items: center;
+
+  margin-bottom: 12px;
+  padding: 12px;
+  border: 1px solid $black;
+  border-radius: 4px;
+}
+
+.ContactList__btn {
+  @extend %button;
+
+  margin-left: auto;
+  border-radius: 4px;
+  padding: 8px 12px;
+  background-color: $indigo;
+  color: $white;
+  font-weight: 500;
+
+  &:hover,
+  &:focus {
+    background-color: $indigo-accent;
+  }
+
+  &:active {
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15);
+  }
+}
