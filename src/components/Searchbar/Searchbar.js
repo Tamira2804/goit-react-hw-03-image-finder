@@ -8,8 +8,6 @@ import {
   SearchFormBtn,
 } from './Searchbar.styled';
 
-// https://pixabay.com/api/?q=cat&page=1&key=37970704-9a867c05051ad7b7bfc1fb55a&image_type=photo&orientation=horizontal&per_page=12
-
 class Searchbar extends Component {
   state = {
     query: '',

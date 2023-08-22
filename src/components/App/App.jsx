@@ -20,25 +20,25 @@ class App extends Component {
   };
 
   handleSearchSubmit = query => {
-    this.setState({ query, images: [], page: 1 }, this.fetchImages);
+    this.setState({ query, images: [], page: 1 });
   };
 
-  fetchImages = () => {
+  componentDidUpdate = (prevProps, prevState) => {
     const { query, page } = this.state;
 
-    this.setState({ loading: true });
-
-    fetchImages(query, page)
-      .then(response => {
+    if (prevState.query !== query || prevState.page !== page) {
+      fetchImages(query, page).then(response => {
         this.setState(prevState => ({
           images: [...prevState.images, ...response.data.hits],
-          page: prevState.page + 1,
         }));
-      })
-      .catch(error => console.error('Error fetching images:', error))
-      .finally(() => {
-        this.setState({ loading: false });
       });
+    }
+  };
+
+  handleLoadMore = () => {
+    this.setState(prevState => ({
+      page: prevState.page + 1,
+    }));
   };
 
   handleImageClick = imageUrl => {
@@ -58,7 +58,7 @@ class App extends Component {
         <ImageGallery images={images} onItemClick={this.handleImageClick} />
         {loading && <Loader />}
         {images.length > 0 && !loading && (
-          <Button onClick={this.fetchImages} label="Load more" />
+          <Button onClick={this.handleLoadMore} label="Load more" />
         )}
         {selectedImage && (
           <Modal image={selectedImage} onClose={this.handleCloseModal} />
