@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/goit-react-hw-03-image-findernpm%20instal%20yup/static/css/main.7cda0caf.css",
-    "main.js": "/goit-react-hw-03-image-findernpm%20instal%20yup/static/js/main.704cfb64.js",
-    "index.html": "/goit-react-hw-03-image-findernpm%20instal%20yup/index.html",
-    "main.7cda0caf.css.map": "/goit-react-hw-03-image-findernpm%20instal%20yup/static/css/main.7cda0caf.css.map",
-    "main.704cfb64.js.map": "/goit-react-hw-03-image-findernpm%20instal%20yup/static/js/main.704cfb64.js.map"
+    "main.css": "/goit-react-hw-03-image-finder/static/css/main.7cda0caf.css",
+    "main.js": "/goit-react-hw-03-image-finder/static/js/main.bd3ccac1.js",
+    "index.html": "/goit-react-hw-03-image-finder/index.html",
+    "main.7cda0caf.css.map": "/goit-react-hw-03-image-finder/static/css/main.7cda0caf.css.map",
+    "main.bd3ccac1.js.map": "/goit-react-hw-03-image-finder/static/js/main.bd3ccac1.js.map"
   },
   "entrypoints": [
     "static/css/main.7cda0caf.css",
-    "static/js/main.704cfb64.js"
+    "static/js/main.bd3ccac1.js"
   ]
 }
