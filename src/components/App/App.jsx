@@ -10,6 +10,13 @@ import { GlobalStyle } from '../GlobalStyle';
 import { Layout } from './App.styled';
 import './App.styled.js';
 
+const Status = {
+  IDLE: 'idle',
+  PENDING: 'pending',
+  RESOLVED: 'resolved',
+  REJECTED: 'rejected',
+};
+
 class App extends Component {
   state = {
     query: '',
@@ -18,24 +25,33 @@ class App extends Component {
     loading: false,
     selectedImage: null,
     showBtn: false,
-  };
-
-  handleSearchSubmit = query => {
-    this.setState({ query, images: [], page: 1 });
+    status: Status.IDLE,
   };
 
   componentDidUpdate = (prevProps, prevState) => {
     const { query, page } = this.state;
 
     if (prevState.query !== query || prevState.page !== page) {
-      fetchImages(query, page).then(response => {
-        console.log(response);
-        this.setState(prevState => ({
-          images: [...prevState.images, ...response.data.hits],
-          showBtn: page < Math.ceil(response.data.totalHits / 12),
-        }));
-      });
+      this.setState({ status: Status.PENDING });
+
+      fetchImages(query, page)
+        .then(response => {
+          console.log(response);
+          this.setState(prevState => ({
+            images: [...prevState.images, ...response.data.hits],
+            showBtn: page < Math.ceil(response.data.totalHits / 12),
+            status: Status.RESOLVED,
+          }));
+        })
+        .catch(error => {
+          console.error(error);
+          this.setState({ status: Status.REJECTED });
+        });
     }
+  };
+
+  handleSearchSubmit = query => {
+    this.setState({ query, images: [], page: 1 });
   };
 
   handleLoadMore = () => {
@@ -53,18 +69,27 @@ class App extends Component {
   };
 
   render() {
-    const { images, loading, selectedImage, showBtn } = this.state;
+    const { images, loading, selectedImage, showBtn, status } = this.state;
 
     return (
       <Layout>
         <Searchbar onSubmit={this.handleSearchSubmit} />
-        <ImageGallery images={images} onItemClick={this.handleImageClick} />
-        {loading && <Loader />}
-        {showBtn && !loading && (
-          <Button onClick={this.handleLoadMore} label="Load more" />
+        {status === Status.IDLE && <div>Enter a search query</div>}
+        {status === Status.PENDING && <Loader />}
+        {status === Status.REJECTED && (
+          <div>Error occurred while loading images.</div>
         )}
-        {selectedImage && (
-          <Modal image={selectedImage} onClose={this.handleCloseModal} />
+        {status === Status.RESOLVED && (
+          <div>
+            <ImageGallery images={images} onItemClick={this.handleImageClick} />
+            {loading && <Loader />}
+            {showBtn && !loading && (
+              <Button onClick={this.handleLoadMore} label="Load more" />
+            )}
+            {selectedImage && (
+              <Modal image={selectedImage} onClose={this.handleCloseModal} />
+            )}
+          </div>
         )}
         <GlobalStyle />
       </Layout>
@@ -73,3 +98,20 @@ class App extends Component {
 }
 
 export default App;
+
+//     return (
+//       <Layout>
+//         <Searchbar onSubmit={this.handleSearchSubmit} />
+//         <ImageGallery images={images} onItemClick={this.handleImageClick} />
+//         {loading && <Loader />}
+//         {showBtn && !loading && (
+//           <Button onClick={this.handleLoadMore} label="Load more" />
+//         )}
+//         {selectedImage && (
+//           <Modal image={selectedImage} onClose={this.handleCloseModal} />
+//         )}
+//         <GlobalStyle />
+//       </Layout>
+//     );
+//   }
+// }
