@@ -17,6 +17,7 @@ class App extends Component {
     page: 1,
     loading: false,
     selectedImage: null,
+    showBtn: false,
   };
 
   handleSearchSubmit = query => {
@@ -28,8 +29,10 @@ class App extends Component {
 
     if (prevState.query !== query || prevState.page !== page) {
       fetchImages(query, page).then(response => {
+        console.log(response);
         this.setState(prevState => ({
           images: [...prevState.images, ...response.data.hits],
+          showBtn: page < Math.ceil(response.data.totalHits / 12),
         }));
       });
     }
@@ -50,14 +53,14 @@ class App extends Component {
   };
 
   render() {
-    const { images, loading, selectedImage } = this.state;
+    const { images, loading, selectedImage, showBtn } = this.state;
 
     return (
       <Layout>
         <Searchbar onSubmit={this.handleSearchSubmit} />
         <ImageGallery images={images} onItemClick={this.handleImageClick} />
         {loading && <Loader />}
-        {images.length > 0 && !loading && (
+        {showBtn && !loading && (
           <Button onClick={this.handleLoadMore} label="Load more" />
         )}
         {selectedImage && (
