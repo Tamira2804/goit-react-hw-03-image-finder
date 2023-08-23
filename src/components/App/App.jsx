@@ -9,6 +9,8 @@ import { fetchImages } from '../../services/HttpService';
 import { GlobalStyle } from '../GlobalStyle';
 import { Layout } from './App.styled';
 import './App.styled.js';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Status = {
   IDLE: 'idle',
@@ -32,21 +34,18 @@ class App extends Component {
     const { query, page } = this.state;
 
     if (prevState.query !== query || prevState.page !== page) {
-      this.setState({ status: Status.PENDING });
-
-      fetchImages(query, page)
-        .then(response => {
-          console.log(response);
-          this.setState(prevState => ({
-            images: [...prevState.images, ...response.data.hits],
-            showBtn: page < Math.ceil(response.data.totalHits / 12),
-            status: Status.RESOLVED,
-          }));
-        })
-        .catch(error => {
-          console.error(error);
-          this.setState({ status: Status.REJECTED });
-        });
+      fetchImages(query, page).then(response => {
+        if (response.data.hits.length === 0) {
+          toast.error(`Sorry, no image for "${query}" request!`, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+          return;
+        }
+        this.setState(prevState => ({
+          images: [...prevState.images, ...response.data.hits],
+          showBtn: page < Math.ceil(response.data.totalHits / 12),
+        }));
+      });
     }
   };
 

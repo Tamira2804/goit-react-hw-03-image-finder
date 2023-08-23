@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { FaSearch } from 'react-icons/fa';
 import { Formik } from 'formik';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import {
   SearchbarWrapper,
   SearchForm,
@@ -19,6 +21,12 @@ class Searchbar extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
+    if (!this.state.query) {
+      toast.error('Please, enter your request!', {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+      return;
+    }
     this.props.onSubmit(this.state.query);
   };
 
