@@ -10,16 +10,22 @@ class Modal extends Component {
   };
 
   handleKeyDown = event => {
-    if (event.code === 'Escape') {
+    if (event.code === 'Escape' || event.target === event.currentTarget) {
+      this.props.onClose();
+    }
+  };
+
+  handleClose = event => {
+    if (event.target === event.currentTarget) {
       this.props.onClose();
     }
   };
 
   render() {
-    const { image, onClose } = this.props;
+    const { image } = this.props;
 
     return (
-      <Overlay onClick={onClose}>
+      <Overlay onClick={this.handleClose}>
         <ModalWindow>
           <img src={image} alt="" />
         </ModalWindow>
