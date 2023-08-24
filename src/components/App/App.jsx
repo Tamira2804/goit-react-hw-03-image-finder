@@ -90,6 +90,7 @@ class App extends Component {
             )}
           </div>
         )}
+        <ToastContainer />
         <GlobalStyle />
       </Layout>
     );
